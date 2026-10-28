@@ -1,7 +1,16 @@
-import { useEffect, useRef, useState } from 'react';
+import {
+  useEffect,
+  useRef,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+} from 'react';
 import styles from './Sequencer.module.css';
 
-export function Sequencer({ onPlayNote, onStopNote }) {
+export const Sequencer = forwardRef(function Sequencer(
+  { onPlayNote, onStopNote },
+  ref,
+) {
   const [isRecording, setIsRecording] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState(1.0);
@@ -10,22 +19,23 @@ export function Sequencer({ onPlayNote, onStopNote }) {
   const startTimeRef = useRef(0);
   const abortControllerRef = useRef(null);
 
-  const handleRecordNote = (midi, type) => {
-    if (!isRecording) {
-      return;
-    }
+  useImperativeHandle(
+    ref,
+    () => ({
+      handleRecordNote(midi, type) {
+        if (!isRecording) return;
 
-    const timeOffset = performance.now() - startTimeRef.current;
+        const timeOffset = performance.now() - startTimeRef.current;
 
-    recordedNotesRef.current.push({
-      midi,
-      type,
-      timeOffset,
-    });
-  };
+        recordedNotesRef.current.push({ midi, type, timeOffset });
+      },
+    }),
+    [isRecording],
+  );
 
   const handleRecord = () => {
     abortControllerRef.current?.abort();
+    abortControllerRef.current = null;
     setIsPlaying(false);
 
     recordedNotesRef.current = [];
@@ -59,7 +69,7 @@ export function Sequencer({ onPlayNote, onStopNote }) {
           setTimeout(resolve, Math.max(0, delay / playbackSpeed));
         });
 
-        // AbortController cho phép hủy replay ngay khi người dùng nhấn Stop.
+        // AbortController cho phép hủy replay khi người dùng nhấn Stop.
         if (controller.signal.aborted) {
           return;
         }
@@ -82,7 +92,6 @@ export function Sequencer({ onPlayNote, onStopNote }) {
     setIsRecording(false);
     setIsPlaying(false);
 
-    // Hủy phiên phát hiện tại mà không ảnh hưởng đến phiên replay mới.
     abortControllerRef.current?.abort();
     abortControllerRef.current = null;
   };
@@ -107,10 +116,7 @@ export function Sequencer({ onPlayNote, onStopNote }) {
         {isRecording ? 'Recording...' : 'Record'}
       </button>
 
-      <button
-        type="button"
-        onClick={handleStop}
-      >
+      <button type="button" onClick={handleStop}>
         Stop
       </button>
 
@@ -139,4 +145,4 @@ export function Sequencer({ onPlayNote, onStopNote }) {
       </label>
     </section>
   );
-}
+});
