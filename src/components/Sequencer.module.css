@@ -1,0 +1,70 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  padding: 16px;
+  background: var(--color-surface, #f2f2f2);
+  border-radius: 8px;
+  color: var(--color-text, #222);
+}
+
+.container button {
+  padding: 8px 16px;
+  border: 1px solid var(--color-border, #ccc);
+  border-radius: 6px;
+  cursor: pointer;
+  background: var(--color-button, #fff);
+  color: var(--color-text, #222);
+  font: inherit;
+  transition: background-color 120ms ease;
+}
+
+.container button:hover:not(:disabled) {
+  background: var(--color-hover, #ddd);
+}
+
+.container button:focus-visible,
+.container select:focus-visible {
+  outline: 3px solid var(--focus, #4285f4);
+  outline-offset: 2px;
+}
+
+.container button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.container select {
+  padding: 8px 12px;
+  border: 1px solid var(--color-border, #ccc);
+  border-radius: 6px;
+  background: var(--color-input, #fff);
+  color: var(--color-text, #222);
+  font: inherit;
+  cursor: pointer;
+}
+
+.container label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+@media (max-width: 480px) {
+  .container {
+    gap: 8px;
+    padding: 12px;
+  }
+
+  .container button {
+    padding: 8px 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .container button {
+    transition: none;
+  }
+}

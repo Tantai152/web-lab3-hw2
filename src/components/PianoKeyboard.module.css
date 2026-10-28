@@ -1,0 +1,36 @@
+.keyboard {
+  display: flex;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  background: var(--color-surface-dark, #222);
+  padding: 16px;
+  box-sizing: border-box;
+  align-items: flex-start;
+  border-radius: 8px;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.keys-container {
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+  align-items: flex-start;
+}
+
+.keyboard:focus-within {
+  outline-offset: 2px;
+}
+
+@media (max-width: 600px) {
+  .keyboard {
+    padding: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .keyboard {
+    scroll-behavior: auto;
+  }
+}
